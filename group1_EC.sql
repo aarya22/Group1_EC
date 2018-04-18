@@ -122,3 +122,85 @@ WHILE @Run > 0
 
 	SET @Run = @Run - 1
 END
+
+
+
+-- Num of movements during us presidential terms
+SELECT (CASE
+	WHEN [YEAR] BETWEEN 1951 AND 1953
+	THEN 'Harry S. Truman'
+	WHEN [YEAR] BETWEEN 1954 AND 1961
+	THEN 'Dwight D. Eisenhower'
+	WHEN [YEAR] BETWEEN 1962 AND 1963
+	THEN 'John F. Kennedy'
+	WHEN [YEAR] BETWEEN 1964 AND 1969
+	THEN 'Lyndon B. Johnson'
+	WHEN [YEAR] BETWEEN 1970 AND 1974
+	THEN 'Richard Nixon'
+	WHEN [YEAR] BETWEEN 1975 AND 1977
+	THEN 'Henry Ford'
+	WHEN [YEAR] BETWEEN 1978 AND 1981
+	THEN 'Jimmy Carter'
+	WHEN [YEAR] BETWEEN 1982 AND 1989
+	THEN 'Ronald Regan'
+	ELSE 'Unknown Term'
+	END) AS 'US President', COUNT(*) AS 'NumOfMovements'
+FROM MOVEMENT
+GROUP BY (CASE
+	WHEN [YEAR] BETWEEN 1951 AND 1953
+	THEN 'Harry S. Truman'
+	WHEN [YEAR] BETWEEN 1954 AND 1961
+	THEN 'Dwight D. Eisenhower'
+	WHEN [YEAR] BETWEEN 1962 AND 1963
+	THEN 'John F. Kennedy'
+	WHEN [YEAR] BETWEEN 1964 AND 1969
+	THEN 'Lyndon B. Johnson'
+	WHEN [YEAR] BETWEEN 1970 AND 1974
+	THEN 'Richard Nixon'
+	WHEN [YEAR] BETWEEN 1975 AND 1977
+	THEN 'Henry Ford'
+	WHEN [YEAR] BETWEEN 1978 AND 1981
+	THEN 'Jimmy Carter'
+	WHEN [YEAR] BETWEEN 1982 AND 1989
+	THEN 'Ronald Regan'
+	ELSE 'Unknown Term'
+	END)
+ORDER BY NumOfMovements DESC
+
+-- Num of movements during us soviet union premier terms
+SELECT (CASE
+	WHEN [YEAR] BETWEEN 1946 AND 1953
+	THEN 'Joseph Stalin'
+	WHEN [YEAR] BETWEEN 1954 AND 1955
+	THEN 'Georgy Malenkov'
+	WHEN [YEAR] BETWEEN 1956 AND 1958
+	THEN 'Nikolai Bulganin'
+	WHEN [YEAR] BETWEEN 1959 AND 1964
+	THEN 'Nikita Khrushchev'
+	WHEN [YEAR] BETWEEN 1965 AND 1980
+	THEN 'Alexei Kosygin'
+	WHEN [YEAR] BETWEEN 1981 AND 1985
+	THEN 'Nikolai Tikhonov'
+	WHEN [YEAR] BETWEEN 1986 AND 1991
+	THEN 'Nikolai Ryzhkov'
+	ELSE 'Unknown Term'
+	END) AS 'Soviet Union Premiers', COUNT(*) AS 'NumOfMovements'
+FROM MOVEMENT
+GROUP BY (CASE
+	WHEN [YEAR] BETWEEN 1946 AND 1953
+	THEN 'Joseph Stalin'
+	WHEN [YEAR] BETWEEN 1954 AND 1955
+	THEN 'Georgy Malenkov'
+	WHEN [YEAR] BETWEEN 1956 AND 1958
+	THEN 'Nikolai Bulganin'
+	WHEN [YEAR] BETWEEN 1959 AND 1964
+	THEN 'Nikita Khrushchev'
+	WHEN [YEAR] BETWEEN 1965 AND 1980
+	THEN 'Alexei Kosygin'
+	WHEN [YEAR] BETWEEN 1981 AND 1985
+	THEN 'Nikolai Tikhonov'
+	WHEN [YEAR] BETWEEN 1986 AND 1991
+	THEN 'Nikolai Ryzhkov'
+	ELSE 'Unknown Term'
+	END)
+ORDER BY NumOfMovements DESC
