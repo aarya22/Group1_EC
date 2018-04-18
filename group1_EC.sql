@@ -103,9 +103,37 @@ WHILE @Run > 0
 	SET @OriginName = (SELECT Origin from WorkingRefugeeData WHERE RowID = @ID)
 	SET @PopTypeName = (SELECT PopType from WorkingRefugeeData WHERE RowID = @ID)
 
+	IF @Value < 0 
+	BEGIN
+		RAISERROR('Cannot have negative people coming in on a given year', 11, 1)
+		RETURN
+	END
+
+	--Error handling
+	--Error if CountryID, OriginTypeID, PopTypeID is null
+	--Error if Value is < 0
+
 	EXEC uspGetCountryID @CountryName, @CID = @CountryID OUTPUT
 	EXEC uspGetOriginTypeID @OriginName, @OTID = @OriginTypeID OUTPUT
 	EXEC uspGetPopTypeID @PopTypeName, @PID = @PopTypeID OUTPUT
+
+	IF @CountryID IS NULL 
+	BEGIN
+		RAISERROR('Country ID is NULL, should be labeled Various/Unknown instead', 11, 1)
+		RETURN
+	END
+
+	IF @OriginTypeID IS NULL 
+	BEGIN
+		RAISERROR('OriginTypeID is NULL, should be labeled Various/Unknown instead', 11, 1)
+		RETURN
+	END
+
+	IF @PopTypeID IS NULL
+	BEGIN
+		RAISERROR('PopTypeID is NULL, should be known', 11, 1)
+		RETURN
+	END
 
 	BEGIN TRAN G1
 	INSERT INTO MOVEMENT (CountryID, OriginTypeID, PopTypeID, [Value], [Year])
@@ -122,3 +150,4 @@ WHILE @Run > 0
 
 	SET @Run = @Run - 1
 END
+
