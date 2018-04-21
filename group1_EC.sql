@@ -146,7 +146,7 @@ WHILE @Run > 0
 	SET @Run = @Run - 1
 END
 
--- Case Statement that indicates the number of refugees that traveled
+-- Thejas: Case Statement that indicates the number of refugees that traveled
 --   to each continent.
 SELECT (CASE
 	WHEN ContinentName LIKE '%Africa%'
