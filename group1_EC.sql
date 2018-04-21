@@ -2,18 +2,15 @@ CREATE DATABASE group1_ec
 
 USE group1_ec
 
-CREATE TABLE MOVEMENT
-	(MovementID INT identity(1,1) primary key not null,
-	CountryID INT FOREIGN KEY REFERENCES COUNTRY(CountryID),
-	OriginTypeID INT FOREIGN KEY REFERENCES ORIGIN_TYPE(OriginTypeID),
-	PopTypeID INT FOREIGN KEY REFERENCES POP_TYPE(PopTypeID),
-	Value INT not null,
-	[Year] INT not null)
+CREATE TABLE CONTINENT
+	(ContinentID INT IDENTITY(1, 1) primary key,
+	ContinentName varchar(50) UNIQUE)
 GO
 
 CREATE TABLE COUNTRY
-	(CountryID INT identity(1,1) primary key not null,
-	CountryName varchar(50))
+	(CountryID INT identity(1,1) primary key,
+	CountryName varchar(50),
+	ContinentID INT FOREIGN KEY REFERENCES CONTINENT(ContinentID) not null)
 GO
 
 CREATE TABLE ORIGIN_TYPE
@@ -24,6 +21,15 @@ GO
 CREATE TABLE POP_TYPE
 	(PopTypeID INT identity(1,1) primary key not null,
 	PopTypeName varchar(300))
+GO
+
+CREATE TABLE MOVEMENT
+	(MovementID INT identity(1,1) primary key not null,
+	CountryID INT FOREIGN KEY REFERENCES COUNTRY(CountryID),
+	OriginTypeID INT FOREIGN KEY REFERENCES ORIGIN_TYPE(OriginTypeID),
+	PopTypeID INT FOREIGN KEY REFERENCES POP_TYPE(PopTypeID),
+	Value INT not null,
+	[Year] INT not null)
 GO
 
 CREATE PROCEDURE uspGetCountryID 
@@ -53,9 +59,11 @@ CREATE PROCEDURE uspGetPopTypeID
 	WHERE PopTypeName = @PopTypeName)
 GO
 
+/*
 DECLARE @PID int
 EXEC uspGetCountryID 'Sweden', @CID = @PID OUTPUT
 print @PID
+*/
 
 CREATE TABLE WorkingRefugeeData
 	(RowID INT identity(1,1) primary key,
@@ -70,9 +78,24 @@ INSERT INTO WorkingRefugeeData
 SELECT *
 FROM RAW_refugee 
 
-INSERT INTO COUNTRY
-SELECT DISTINCT Country
-FROM WorkingRefugeeData
+INSERT INTO CONTINENT (ContinentName)
+	SELECT DISTINCT(Continent) FROM dbo.ImportCont
+GO
+
+CREATE TABLE PopCountry
+	(CountryName varchar(50) not null UNIQUE)
+GO
+
+INSERT INTO PopCountry (CountryName)
+	SELECT DISTINCT Country FROM WorkingRefugeeData
+GO
+
+
+INSERT INTO COUNTRY (CountryName, ContinentID)
+select P.CountryName, C.ContinentID from #PopCountry P
+	JOIN ImportCont I ON P.CountryName = I.Country
+	JOIN CONTINENT C ON I.Continent = C.ContinentName 
+GO
 
 INSERT INTO ORIGIN_TYPE
 SELECT DISTINCT Origin
@@ -122,10 +145,9 @@ WHILE @Run > 0
 
 	SET @Run = @Run - 1
 END
+GO
 
-
-
--- Num of movements during us presidential terms
+-- Leandro: Num of movements during us presidential terms
 SELECT (CASE
 	WHEN [YEAR] BETWEEN 1951 AND 1953
 	THEN 'Harry S. Truman'
@@ -166,8 +188,9 @@ GROUP BY (CASE
 	ELSE 'Unknown Term'
 	END)
 ORDER BY NumOfMovements DESC
+GO
 
--- Num of movements during us soviet union premier terms
+-- Leandro: Num of movements during us soviet union premier terms
 SELECT (CASE
 	WHEN [YEAR] BETWEEN 1946 AND 1953
 	THEN 'Joseph Stalin'
@@ -204,3 +227,41 @@ GROUP BY (CASE
 	ELSE 'Unknown Term'
 	END)
 ORDER BY NumOfMovements DESC
+GO
+
+-- Thejas: Case Statement that indicates the number of refugees that traveled
+--   to each continent.
+SELECT (CASE
+	WHEN ContinentName LIKE '%Africa%'
+		THEN 'Africa'
+	WHEN ContinentName LIKE '%Asia%'
+		THEN 'Asia'
+	WHEN ContinentName LIKE '%Europe'
+		THEN 'Europe'
+	WHEN ContinentName LIKE '%North America%'
+		THEN 'North America'
+	WHEN ContinentName LIKE '%Ocenia%'
+		THEN 'Ocenia'
+	WHEN ContinentName LIKE '%South America%'
+		THEN 'South America'
+	ELSE 'NOT sure'
+	END) AS 'Continent Traveled to', COUNT(*) AS 'NumberOfPeople'
+FROM MOVEMENT M
+	JOIN COUNTRY C ON M.CountryID=C.CountryID
+	JOIN CONTINENT CO ON C.ContinentID=CO.ContinentID
+GROUP BY (CASE
+	WHEN ContinentName LIKE '%Africa%'
+		THEN 'Africa'
+	WHEN ContinentName LIKE '%Asia%'
+		THEN 'Asia'
+	WHEN ContinentName LIKE '%Europe'
+		THEN 'Europe'
+	WHEN ContinentName LIKE '%North America%'
+		THEN 'North America'
+	WHEN ContinentName LIKE '%Ocenia%'
+		THEN 'Ocenia'
+	WHEN ContinentName LIKE '%South America%'
+		THEN 'South America'
+	ELSE 'NOT sure'
+	END)
+GO
