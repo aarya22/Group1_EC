@@ -152,223 +152,67 @@ WHILE @Run > 0
 END
 
 SELECT (CASE
- WHEN ([Year] BETWEEN 1950 and 1953 
- AND OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName = 'Various/Unknown')) 
- OR OriginTypeID IN (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName LIKE '%Korea%' OR OriginTypeName = 'Various/Unknown')
+ WHEN ([Year] BETWEEN 1950 and 1953)
  THEN 'Korean War'
 
- WHEN ([Year] BETWEEN 1954 and 1959 
- AND OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName = 'Various/Unknown'))
- OR OriginTypeID IN (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName LIKE '%Cuba%')
+ WHEN ([Year] BETWEEN 1954 and 1959)
  THEN 'Cuban Revolution'
 
- WHEN ([Year] BETWEEN 1960 and 1975
- AND OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName = 'Various/Unknown')) 
- OR OriginTypeID IN (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName LIKE '%Vietnam%' OR
- OriginTypeName LIKE '%Myanmar%' OR
- OriginTypeName LIKE '%Indonesia' OR
- OriginTypeName LIKE '%Philippines' OR
- OriginTypeName = 'Various/Unknown')
+ WHEN ([Year] BETWEEN 1960 and 1975)
  THEN 'Vietnam War'
 
- WHEN ([Year] BETWEEN 1975 and 1978
- AND OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName = 'Various/Unknown')) 
- OR OriginTypeID IN (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName LIKE '%Ghana%' OR
- OriginTypeName LIKE '%Mozambique%' OR
- OriginTypeName LIKE '%Central African Rep.%' OR
- OriginTypeName LIKE '%Uganda%' OR
- OriginTypeName LIKE '%Mauritania%' OR
- OriginTypeName LIKE '%Libya%' OR
- OriginTypeName LIKE '%Tanzania%' OR
- OriginTypeName LIKE '%Congo%' OR
- OriginTypeName LIKE '%Nigeria%' OR
- OriginTypeName LIKE '%Chad%' OR
- OriginTypeName LIKE '%Benin%' OR
- OriginTypeName LIKE '%Tunisia%' OR
- OriginTypeName LIKE '%Morocco%' OR
- OriginTypeName LIKE '%Sierra Leone%' OR
- OriginTypeName LIKE '%Ethiopia%' OR
- OriginTypeName LIKE '%Liberia%' OR
- OriginTypeName LIKE '%Nambia%' OR
- OriginTypeName LIKE '%Somalia%' OR
- OriginTypeName LIKE '%Burundi%' OR
- OriginTypeName LIKE '%Sudan%' OR
- OriginTypeName LIKE '%Botswana%' OR
- OriginTypeName LIKE '%Kenya%' OR
- OriginTypeName LIKE '%Algeria%' OR
- OriginTypeName LIKE '%Rwanda%' OR
- OriginTypeName = 'Various/Unknown')
+ WHEN ([Year] BETWEEN 1975 and 1978)
  THEN 'African Civil Wars'
 
- WHEN ([Year] BETWEEN 1979 and 1981 
- AND OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName = 'Various/Unknown')) 
- OR OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName LIKE '%Afghanistan%' OR
- OriginTypeName LIKE '%Iran%' OR
- OriginTypeName LIKE '%Iraq%' OR
- OriginTypeName LIKE '%Palestinian%')
+ WHEN ([Year] BETWEEN 1979 and 1981)
  THEN 'Soviet Invasion of Afghanistan'
 
- WHEN ([Year] BETWEEN 1982 and 1982
- AND OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName = 'Various/Unknown')) 
- OR OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName LIKE '%Argentina%')
+ WHEN ([Year] BETWEEN 1982 and 1982)
  THEN 'Falklands War'
 
- WHEN ([Year] BETWEEN 1983 and 1983
- AND OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName = 'Various/Unknown')) 
- OR OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName LIKE '%Grenada%' OR
- OriginTypeName LIKE '%Cuba%')
+ WHEN ([Year] BETWEEN 1983 and 1983)
  THEN 'Invasion of Grenada'
 
- WHEN ([Year] BETWEEN 1984 and 1987
- AND OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName = 'Various/Unknown')) 
- OR OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName LIKE '%India%' OR 
- OriginTypeName LIKE '%Pakistan%')
+ WHEN ([Year] BETWEEN 1984 and 1987)
  THEN 'Siachen Conflict'
 
- WHEN ([Year] BETWEEN 1988 and 1988
- AND OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName = 'Various/Unknown')) 
- OR OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName LIKE '%Uganda%' OR
- OriginTypeName LIKE '%Sudan%' OR 
- OriginTypeName LIKE '%Congo%' OR 
- OriginTypeName LIKE '%Central African Rep.%')
+ WHEN ([Year] BETWEEN 1988 and 1988)
  THEN 'Lords Resistance Army Insurgency'
 
- WHEN ([Year] BETWEEN 1989 and 1989
- AND OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName = 'Various/Unknown')) 
- OR OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName LIKE '%India%' OR 
- OriginTypeName LIKE '%Pakistan%')
+ WHEN ([Year] BETWEEN 1989 and 1989)
  THEN 'Kashmiri Insurgency'
  ELSE 'Other Conflicts'
  END) AS 'Major Conflict', SUM(Value) AS NumDisplaced 
 FROM MOVEMENT
 GROUP BY (CASE
- WHEN ([Year] BETWEEN 1950 and 1953 
- AND OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName = 'Various/Unknown')) 
- OR OriginTypeID IN (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName LIKE '%Korea%' OR OriginTypeName = 'Various/Unknown')
+ WHEN ([Year] BETWEEN 1950 and 1953)
  THEN 'Korean War'
 
- WHEN ([Year] BETWEEN 1954 and 1959 
- AND OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName = 'Various/Unknown'))
- OR OriginTypeID IN (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName LIKE '%Cuba%')
+ WHEN ([Year] BETWEEN 1954 and 1959)
  THEN 'Cuban Revolution'
 
- WHEN ([Year] BETWEEN 1960 and 1975
- AND OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName = 'Various/Unknown')) 
- OR OriginTypeID IN (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName LIKE '%Vietnam%' OR
- OriginTypeName LIKE '%Myanmar%' OR
- OriginTypeName LIKE '%Indonesia' OR
- OriginTypeName LIKE '%Philippines' OR
- OriginTypeName = 'Various/Unknown')
+ WHEN ([Year] BETWEEN 1960 and 1975)
  THEN 'Vietnam War'
 
- WHEN ([Year] BETWEEN 1975 and 1978
- AND OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName = 'Various/Unknown')) 
- OR OriginTypeID IN (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName LIKE '%Ghana%' OR
- OriginTypeName LIKE '%Mozambique%' OR
- OriginTypeName LIKE '%Central African Rep.%' OR
- OriginTypeName LIKE '%Uganda%' OR
- OriginTypeName LIKE '%Mauritania%' OR
- OriginTypeName LIKE '%Libya%' OR
- OriginTypeName LIKE '%Tanzania%' OR
- OriginTypeName LIKE '%Congo%' OR
- OriginTypeName LIKE '%Nigeria%' OR
- OriginTypeName LIKE '%Chad%' OR
- OriginTypeName LIKE '%Benin%' OR
- OriginTypeName LIKE '%Tunisia%' OR
- OriginTypeName LIKE '%Morocco%' OR
- OriginTypeName LIKE '%Sierra Leone%' OR
- OriginTypeName LIKE '%Ethiopia%' OR
- OriginTypeName LIKE '%Liberia%' OR
- OriginTypeName LIKE '%Nambia%' OR
- OriginTypeName LIKE '%Somalia%' OR
- OriginTypeName LIKE '%Burundi%' OR
- OriginTypeName LIKE '%Sudan%' OR
- OriginTypeName LIKE '%Botswana%' OR
- OriginTypeName LIKE '%Kenya%' OR
- OriginTypeName LIKE '%Algeria%' OR
- OriginTypeName LIKE '%Rwanda%' OR
- OriginTypeName = 'Various/Unknown')
+ WHEN ([Year] BETWEEN 1975 and 1978)
  THEN 'African Civil Wars'
 
- WHEN ([Year] BETWEEN 1979 and 1981 
- AND OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName = 'Various/Unknown')) 
- OR OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName LIKE '%Afghanistan%' OR
- OriginTypeName LIKE '%Iran%' OR
- OriginTypeName LIKE '%Iraq%' OR
- OriginTypeName LIKE '%Palestinian%')
+ WHEN ([Year] BETWEEN 1979 and 1981)
  THEN 'Soviet Invasion of Afghanistan'
 
- WHEN ([Year] BETWEEN 1982 and 1982
- AND OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName = 'Various/Unknown')) 
- OR OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName LIKE '%Argentina%')
+ WHEN ([Year] BETWEEN 1982 and 1982)
  THEN 'Falklands War'
 
- WHEN ([Year] BETWEEN 1983 and 1983
- AND OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName = 'Various/Unknown')) 
- OR OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName LIKE '%Grenada%' OR
- OriginTypeName LIKE '%Cuba%')
+ WHEN ([Year] BETWEEN 1983 and 1983)
  THEN 'Invasion of Grenada'
 
- WHEN ([Year] BETWEEN 1984 and 1987
- AND OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName = 'Various/Unknown')) 
- OR OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName LIKE '%India%' OR 
- OriginTypeName LIKE '%Pakistan%')
+ WHEN ([Year] BETWEEN 1984 and 1987)
  THEN 'Siachen Conflict'
 
- WHEN ([Year] BETWEEN 1988 and 1988
- AND OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName = 'Various/Unknown')) 
- OR OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName LIKE '%Uganda%' OR
- OriginTypeName LIKE '%Sudan%' OR 
- OriginTypeName LIKE '%Congo%' OR 
- OriginTypeName LIKE '%Central African Rep.%')
+ WHEN ([Year] BETWEEN 1988 and 1988)
  THEN 'Lords Resistance Army Insurgency'
 
- WHEN ([Year] BETWEEN 1989 and 1989
- AND OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName = 'Various/Unknown')) 
- OR OriginTypeID = (SELECT OriginTypeID from ORIGIN_TYPE
- WHERE OriginTypeName LIKE '%India%' OR 
- OriginTypeName LIKE '%Pakistan%')
+ WHEN ([Year] BETWEEN 1989 and 1989)
  THEN 'Kashmiri Insurgency'
  ELSE 'Other Conflicts'
-END)
-
-Select * from ORIGIN_TYPE
+ END) ORDER BY NumDisplaced DESC
