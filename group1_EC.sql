@@ -174,6 +174,45 @@ WHILE @Run > 0
 	SET @Run = @Run - 1
 END
 
+--Ian F Case Statement
+SELECT (CASE
+	WHEN [Value] BETWEEN 0 AND 500
+	THEN 'Little to No Immigration'
+	WHEN [Value] BETWEEN 501 AND 2000
+	THEN 'Extremely Low Immigration'
+	WHEN [Value] BETWEEN 2001 AND 10000
+	THEN 'Low Immigration'
+	WHEN [Value] BETWEEN 10001 AND 50000
+	THEN 'Medium immigration'
+	WHEN [Value] BETWEEN 50001 AND 125000
+	THEN 'Large Immigration'
+	WHEN [Value] BETWEEN 125001 AND 300000
+	THEN 'Very Large Immigration'
+	WHEN [Value] BETWEEN 300001 AND 500000
+	THEN 'Extremely Large Immigration'
+	ELSE 'Massive Displacement'
+	END) As 'Size', COUNT(*) AS 'Number Of People'
+FROM Movement
+GROUP BY(CASE
+	WHEN [Value] BETWEEN 0 AND 500
+	THEN 'Little to No Immigration'
+	WHEN [Value] BETWEEN 501 AND 2000
+	THEN 'Extremely Low Immigration'
+	WHEN [Value] BETWEEN 2001 AND 10000
+	THEN 'Low Immigration'
+	WHEN [Value] BETWEEN 10001 AND 50000
+	THEN 'Medium immigration'
+	WHEN [Value] BETWEEN 50001 AND 125000
+	THEN 'Large Immigration'
+	WHEN [Value] BETWEEN 125001 AND 300000
+	THEN 'Very Large Immigration'
+	WHEN [Value] BETWEEN 300001 AND 500000
+	THEN 'Extremely Large Immigration'
+	ELSE 'Massive Displacement'
+	END)
+ORDER BY 'Number Of People' DESC
+go
+
 --Aman Arya: Movements during some of the major conflicts of the 20th century
 SELECT (CASE
  WHEN ([Year] BETWEEN 1950 and 1953)
