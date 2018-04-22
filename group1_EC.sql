@@ -126,9 +126,37 @@ WHILE @Run > 0
 	SET @OriginName = (SELECT Origin from WorkingRefugeeData WHERE RowID = @ID)
 	SET @PopTypeName = (SELECT PopType from WorkingRefugeeData WHERE RowID = @ID)
 
+	IF @Value < 0 
+	BEGIN
+		RAISERROR('Cannot have negative people coming in on a given year', 11, 1)
+		RETURN
+	END
+
+	--Error handling
+	--Error if CountryID, OriginTypeID, PopTypeID is null
+	--Error if Value is < 0
+
 	EXEC uspGetCountryID @CountryName, @CID = @CountryID OUTPUT
 	EXEC uspGetOriginTypeID @OriginName, @OTID = @OriginTypeID OUTPUT
 	EXEC uspGetPopTypeID @PopTypeName, @PID = @PopTypeID OUTPUT
+
+	IF @CountryID IS NULL 
+	BEGIN
+		RAISERROR('Country ID is NULL, should be labeled Various/Unknown instead', 11, 1)
+		RETURN
+	END
+
+	IF @OriginTypeID IS NULL 
+	BEGIN
+		RAISERROR('OriginTypeID is NULL, should be labeled Various/Unknown instead', 11, 1)
+		RETURN
+	END
+
+	IF @PopTypeID IS NULL
+	BEGIN
+		RAISERROR('PopTypeID is NULL, should be known', 11, 1)
+		RETURN
+	END
 
 	BEGIN TRAN G1
 	INSERT INTO MOVEMENT (CountryID, OriginTypeID, PopTypeID, [Value], [Year])
@@ -145,6 +173,73 @@ WHILE @Run > 0
 
 	SET @Run = @Run - 1
 END
+
+--Aman Arya: Movements during some of the major conflicts of the 20th century
+SELECT (CASE
+ WHEN ([Year] BETWEEN 1950 and 1953)
+ THEN 'Korean War'
+
+ WHEN ([Year] BETWEEN 1954 and 1959)
+ THEN 'Cuban Revolution'
+
+ WHEN ([Year] BETWEEN 1960 and 1975)
+ THEN 'Vietnam War'
+
+ WHEN ([Year] BETWEEN 1975 and 1978)
+ THEN 'African Civil Wars'
+
+ WHEN ([Year] BETWEEN 1979 and 1981)
+ THEN 'Soviet Invasion of Afghanistan'
+
+ WHEN ([Year] BETWEEN 1982 and 1982)
+ THEN 'Falklands War'
+
+ WHEN ([Year] BETWEEN 1983 and 1983)
+ THEN 'Invasion of Grenada'
+
+ WHEN ([Year] BETWEEN 1984 and 1987)
+ THEN 'Siachen Conflict'
+
+ WHEN ([Year] BETWEEN 1988 and 1988)
+ THEN 'Lords Resistance Army Insurgency'
+
+ WHEN ([Year] BETWEEN 1989 and 1989)
+ THEN 'Kashmiri Insurgency'
+ ELSE 'Other Conflicts'
+ END) AS 'Major Conflict', SUM(Value) AS NumDisplaced 
+FROM MOVEMENT
+GROUP BY (CASE
+ WHEN ([Year] BETWEEN 1950 and 1953)
+ THEN 'Korean War'
+
+ WHEN ([Year] BETWEEN 1954 and 1959)
+ THEN 'Cuban Revolution'
+
+ WHEN ([Year] BETWEEN 1960 and 1975)
+ THEN 'Vietnam War'
+
+ WHEN ([Year] BETWEEN 1975 and 1978)
+ THEN 'African Civil Wars'
+
+ WHEN ([Year] BETWEEN 1979 and 1981)
+ THEN 'Soviet Invasion of Afghanistan'
+
+ WHEN ([Year] BETWEEN 1982 and 1982)
+ THEN 'Falklands War'
+
+ WHEN ([Year] BETWEEN 1983 and 1983)
+ THEN 'Invasion of Grenada'
+
+ WHEN ([Year] BETWEEN 1984 and 1987)
+ THEN 'Siachen Conflict'
+
+ WHEN ([Year] BETWEEN 1988 and 1988)
+ THEN 'Lords Resistance Army Insurgency'
+
+ WHEN ([Year] BETWEEN 1989 and 1989)
+ THEN 'Kashmiri Insurgency'
+ ELSE 'Other Conflicts'
+ END) ORDER BY NumDisplaced DESC
 GO
 
 -- Leandro: Num of movements during us presidential terms
